@@ -1,21 +1,11 @@
-# SMPL-X → Robot Retargeting
 
-本目录是从 `/data/GMR-master/scripts/robot_dataset_stage2` 整理出的独立生产
-副本，将本工程生成的 canonical SMPL-X 30 FPS 动作重定向到 6 种机器人，
-并精确抽取相同时间点的 15 FPS 轨迹。
+- `pipeline/`: Single-motion generation, 515-motion batch processing, MuJoCo schemas, trajectory post-processing, and validation utilities.
+- `general_motion_retargeting/`: Production implementation of the GMR / Mink retargeting solver.
+- `configs/`: Production configuration files for the 6 humanoid robots.
+- `general_motion_retargeting/ik_configs/`: SMPL-X inverse kinematics (IK) configuration files for each robot.
+- `assets/`: Robot URDF/MJCF models and symbolic links to SMPL-X body models.
 
-## 保留内容
-
-- `pipeline/`：单动作生成、515 条批处理、MuJoCo schema、轨迹后处理与验证；
-- `general_motion_retargeting/`：生产流程实际 import 的 GMR/Mink 求解代码；
-- `configs/`：6 种机器人的正式配置；
-- `general_motion_retargeting/ik_configs/`：6 份 SMPL-X IK 配置；
-- `assets/`：机器人资产与 SMPL-X body model 的软链接。
-
-没有复制 audit、pilot、测试 shell、预览器、GUI 回放器、copy/debug 变体或
-Python 缓存。
-
-## 支持的机器人
+## Supported Robots
 
 ```text
 unitree_g1
@@ -26,48 +16,49 @@ hightorque_hi
 engineai_pm01
 ```
 
-## 软链接
+## Symbolic Links
 
-六个机器人资产目录分别链接到 `/data/GMR-master/assets/<robot_id>`，因此
-XML、URDF 与 XML 引用的 mesh 都可用，但不会重复占用空间。
+Set up the required symlink to the SMPL-X body models:
 
-```text
+```bash
 assets/body_models/smplx -> /data/smpl_models/smplx
 ```
 
-若这些源目录移动，必须重新建立对应软链接。生产 Python 代码本身不 import
-`/data/GMR-master` 中的模块。
+## Environment & Dependencies
 
-## 环境
+Verified environment:
 
-已验证环境：
-
-```text
+```bash
 /home/dell/anaconda3/envs/myenv/bin/python
 ```
 
-主要依赖为 NumPy、SciPy、PyTorch、SMPL-X、MuJoCo、Mink、DAQP、PyYAML、
-Matplotlib、Rich 和 tqdm。依赖名称同时记录在项目根目录 `requirements.txt`。
+Core dependencies include:
+- `NumPy`, `SciPy`, `PyTorch`
+- `SMPL-X`, `MuJoCo`, `Mink`, `DAQP`
+- `PyYAML`, `Matplotlib`, `Rich`, `tqdm`
 
-## 默认输入输出
+All required packages are documented in `requirements.txt`.
+
+## Default Paths & I/O
 
 ```text
-候选清单: /data/h2o_data_engine/selection/artifacts/v4/candidate_v4.jsonl
-canonical: /data/h2o_data_engine/work/canonical/motions/<motion_id>/source/
-PLY:       /data/h2o_data_engine/work/ply/<motion_id>/
-输出:      /data/h2o_data_engine/work/robots/
+Candidate Manifest: /data/h2o_data_engine/selection/artifacts/v4/candidate_v4.jsonl
+Canonical Motions:  /data/h2o_data_engine/work/canonical/motions/<motion_id>/source/
+PLY Files:          /data/h2o_data_engine/work/ply/<motion_id>/
+Output Directory:   /data/h2o_data_engine/work/robots/
 ```
 
-如果 canonical、PLY 或输出位于外部数据盘，修改对应
-`configs/robot_generation_*.yaml` 的 `paths` 即可。PLY 只用于检查机器人
-15 FPS 与视觉帧是否对齐，不参与 IK 求解。
+If the canonical data, PLY files, or output directory reside on external storage, update the `paths` section in the corresponding `configs/robot_generation_*.yaml`. 
 
-## 单动作生成
+> **Note:** PLY files are strictly utilized to verify temporal alignment between the 15 FPS robot trajectories and visual frames; they are not involved in IK solving.
 
-从项目根目录运行：
+## Single-Motion Generation
+
+Run the following command from the repository root:
 
 ```bash
 cd /data/h2o_data_engine
+
 MPLCONFIGDIR=/tmp/robot-retarget-mpl \
 /home/dell/anaconda3/envs/myenv/bin/python \
   robot_retargeting/pipeline/generate_one.py \
@@ -76,10 +67,11 @@ MPLCONFIGDIR=/tmp/robot-retarget-mpl \
   --resume
 ```
 
-将配置文件换成其他机器人即可。仅在明确需要覆盖已有单动作结果时使用
-`--overwrite`。
+To target a different robot, specify its corresponding config file. Pass `--overwrite` only when explicitly intending to regenerate and overwrite existing results.
 
-## 单机器人全量 515 条
+## Batch Generation (Per Robot)
+
+Process all motions for a given robot:
 
 ```bash
 MPLCONFIGDIR=/tmp/robot-retarget-mpl \
@@ -89,12 +81,13 @@ MPLCONFIGDIR=/tmp/robot-retarget-mpl \
   --all
 ```
 
-依次对 6 份配置运行即可获得 6 种机器人。批处理内部对每条动作使用 resume
-语义：完整且身份一致的结果验证后跳过；失败记录写入输出根目录 `failures/`。
+Execute this command sequentially for each of the 6 configuration files to retarget motions across all robots. 
 
-## 验证已有结果
+The batch script implements automatic **resume semantics**: complete and identity-verified results are automatically validated and skipped, while failed cases are logged under `<output_root>/failures/`.
 
-验证单个输出目录的全部 MuJoCo 帧：
+## Result Validation
+
+Validate all MuJoCo frames for a single motion output directory:
 
 ```bash
 /home/dell/anaconda3/envs/myenv/bin/python \
@@ -104,7 +97,7 @@ MPLCONFIGDIR=/tmp/robot-retarget-mpl \
   --write-report
 ```
 
-验证某机器人清单中的全部已有结果：
+Validate all existing results listed in a robot inventory manifest:
 
 ```bash
 /home/dell/anaconda3/envs/myenv/bin/python \
@@ -115,7 +108,7 @@ MPLCONFIGDIR=/tmp/robot-retarget-mpl \
   --all-mujoco-frames
 ```
 
-## 输出
+## Output Structure
 
 ```text
 work/robots/
@@ -131,5 +124,4 @@ work/robots/
     validation.json
 ```
 
-15 FPS 数组严格等于 30 FPS 数组的 `0, 2, 4, ...` 帧，与 Avatar PLY、RGB、
-TIFF Depth 和 Mask 使用同一组视觉帧编号。
+The 15 FPS trajectory strictly samples even indices (`0, 2, 4, ...`) of the 30 FPS trajectory, sharing the exact visual frame IDs with the Avatar PLY sequences, RGB images, TIFF depth maps, and foreground masks.
