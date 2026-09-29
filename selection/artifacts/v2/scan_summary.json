@@ -1,0 +1,327 @@
+{
+  "amass_root": "/data/motions/AMASS/smpl-x-n",
+  "target_fps": 30.0,
+  "num_files_found": 8345,
+  "num_inventory_records": 8345,
+  "num_npz_loaded": 7426,
+  "num_semantic_rejected_without_npz_load": 917,
+  "path_mapping": {
+    "local_motion_count": 8345,
+    "babel_entry_count": 10892,
+    "babel_mapping_status": {
+      "ambiguous_local_conflict": 6,
+      "match_anchor_exact": 6998,
+      "unmatched": 3888
+    },
+    "matched_local_count": 6998,
+    "ambiguous_local_count": 3,
+    "unmatched_local_count": 1344
+  },
+  "stage_status_counts": {
+    "semantic": {
+      "babel_ambiguous": 3,
+      "babel_unmatched": 1344,
+      "reject_semantic_coverage": 143,
+      "reject_semantic_hard": 774,
+      "semantic_passed": 6081
+    },
+    "basic": {
+      "basic_passed": 5069,
+      "defer_fps": 341,
+      "defer_long": 1106,
+      "defer_very_long": 421,
+      "not_loaded_semantic_reject": 917,
+      "reject_corrupt": 2,
+      "review_short": 489
+    },
+    "heuristic": {
+      "heuristic_passed": 5069,
+      "not_run": 3276
+    },
+    "dedup": {
+      "duplicate_exact": 7,
+      "duplicate_near_quantized": 10,
+      "not_eligible": 3276,
+      "unique": 5052
+    },
+    "quota": {
+      "defer_global_budget": 3957,
+      "defer_quota_category": 43,
+      "not_eligible": 3293,
+      "selected_candidate": 1052
+    }
+  },
+  "final_status_distribution": {
+    "selected_candidate": 1052,
+    "defer_quota_category": 43,
+    "defer_global_budget": 3957,
+    "reject_semantic_hard": 774,
+    "reject_semantic_coverage": 143,
+    "review_short": 489,
+    "defer_long": 1106,
+    "defer_very_long": 421,
+    "defer_fps": 341,
+    "defer_low_fps": 0,
+    "reject_corrupt": 2,
+    "reject_missing_field": 0,
+    "reject_invalid_value": 0,
+    "reject_heuristic": 0,
+    "defer_duplicate": 17
+  },
+  "category_statistics": {
+    "before_semantic_filter": {
+      "total_sequence_count": 8345,
+      "total_duration_sec": 99736.204292,
+      "babel_matched_count": 6998,
+      "babel_unmatched_or_ambiguous_count": 1347,
+      "allocated_duration_total_sec": 99736.204303,
+      "categories": {
+        "combat_sport": {
+          "sequence_count_any": 284,
+          "primary_sequence_count": 128,
+          "inclusive_duration_sec": 1545.981333,
+          "allocated_duration_sec": 1092.741701,
+          "any_sequence_count_ratio": 0.03403235,
+          "primary_sequence_count_ratio": 0.01533853,
+          "allocated_duration_ratio": 0.01095632
+        },
+        "dance": {
+          "sequence_count_any": 153,
+          "primary_sequence_count": 125,
+          "inclusive_duration_sec": 2247.328001,
+          "allocated_duration_sec": 2011.905311,
+          "any_sequence_count_ratio": 0.01833433,
+          "primary_sequence_count_ratio": 0.01497903,
+          "allocated_duration_ratio": 0.02017227
+        },
+        "floor_motion": {
+          "sequence_count_any": 93,
+          "primary_sequence_count": 49,
+          "inclusive_duration_sec": 510.091,
+          "allocated_duration_sec": 453.3085,
+          "any_sequence_count_ratio": 0.0111444,
+          "primary_sequence_count_ratio": 0.00587178,
+          "allocated_duration_ratio": 0.00454507
+        },
+        "gesture": {
+          "sequence_count_any": 1273,
+          "primary_sequence_count": 420,
+          "inclusive_duration_sec": 9682.02367,
+          "allocated_duration_sec": 5249.788683,
+          "any_sequence_count_ratio": 0.15254643,
+          "primary_sequence_count_ratio": 0.05032954,
+          "allocated_duration_ratio": 0.05263674
+        },
+        "locomotion": {
+          "sequence_count_any": 3236,
+          "primary_sequence_count": 2211,
+          "inclusive_duration_sec": 23075.860324,
+          "allocated_duration_sec": 19771.245201,
+          "any_sequence_count_ratio": 0.38777711,
+          "primary_sequence_count_ratio": 0.26494907,
+          "allocated_duration_ratio": 0.19823539
+        },
+        "other": {
+          "sequence_count_any": 3940,
+          "primary_sequence_count": 2088,
+          "inclusive_duration_sec": 33391.731994,
+          "allocated_duration_sec": 25865.215032,
+          "any_sequence_count_ratio": 0.47213901,
+          "primary_sequence_count_ratio": 0.25020971,
+          "allocated_duration_ratio": 0.25933627
+        },
+        "static": {
+          "sequence_count_any": 2114,
+          "primary_sequence_count": 317,
+          "inclusive_duration_sec": 8254.585005,
+          "allocated_duration_sec": 7123.537106,
+          "any_sequence_count_ratio": 0.25332534,
+          "primary_sequence_count_ratio": 0.03798682,
+          "allocated_duration_ratio": 0.07142378
+        },
+        "transition": {
+          "sequence_count_any": 2786,
+          "primary_sequence_count": 311,
+          "inclusive_duration_sec": 7890.88066,
+          "allocated_duration_sec": 7602.946474,
+          "any_sequence_count_ratio": 0.33385261,
+          "primary_sequence_count_ratio": 0.03726783,
+          "allocated_duration_ratio": 0.07623056
+        },
+        "unknown": {
+          "sequence_count_any": 2948,
+          "primary_sequence_count": 2696,
+          "inclusive_duration_sec": 30565.516295,
+          "allocated_duration_sec": 30565.516295,
+          "any_sequence_count_ratio": 0.35326543,
+          "primary_sequence_count_ratio": 0.32306771,
+          "allocated_duration_ratio": 0.3064636
+        }
+      }
+    },
+    "after_dual_filter": {
+      "total_sequence_count": 5069,
+      "total_duration_sec": 28857.674946,
+      "babel_matched_count": 4067,
+      "babel_unmatched_or_ambiguous_count": 1002,
+      "allocated_duration_total_sec": 28857.674958,
+      "categories": {
+        "combat_sport": {
+          "sequence_count_any": 176,
+          "primary_sequence_count": 100,
+          "inclusive_duration_sec": 474.006332,
+          "allocated_duration_sec": 392.07675,
+          "any_sequence_count_ratio": 0.03472085,
+          "primary_sequence_count_ratio": 0.01972776,
+          "allocated_duration_ratio": 0.01358657
+        },
+        "dance": {
+          "sequence_count_any": 65,
+          "primary_sequence_count": 59,
+          "inclusive_duration_sec": 430.941335,
+          "allocated_duration_sec": 397.827334,
+          "any_sequence_count_ratio": 0.01282304,
+          "primary_sequence_count_ratio": 0.01163938,
+          "allocated_duration_ratio": 0.01378584
+        },
+        "gesture": {
+          "sequence_count_any": 620,
+          "primary_sequence_count": 285,
+          "inclusive_duration_sec": 1713.788667,
+          "allocated_duration_sec": 927.693843,
+          "any_sequence_count_ratio": 0.12231209,
+          "primary_sequence_count_ratio": 0.05622411,
+          "allocated_duration_ratio": 0.03214721
+        },
+        "locomotion": {
+          "sequence_count_any": 1686,
+          "primary_sequence_count": 1294,
+          "inclusive_duration_sec": 6704.744328,
+          "allocated_duration_sec": 6189.011672,
+          "any_sequence_count_ratio": 0.33260998,
+          "primary_sequence_count_ratio": 0.25527717,
+          "allocated_duration_ratio": 0.21446675
+        },
+        "other": {
+          "sequence_count_any": 2313,
+          "primary_sequence_count": 1180,
+          "inclusive_duration_sec": 8248.047659,
+          "allocated_duration_sec": 6908.298668,
+          "any_sequence_count_ratio": 0.45630302,
+          "primary_sequence_count_ratio": 0.23278753,
+          "allocated_duration_ratio": 0.23939207
+        },
+        "static": {
+          "sequence_count_any": 873,
+          "primary_sequence_count": 133,
+          "inclusive_duration_sec": 1436.622328,
+          "allocated_duration_sec": 1251.412422,
+          "any_sequence_count_ratio": 0.17222332,
+          "primary_sequence_count_ratio": 0.02623792,
+          "allocated_duration_ratio": 0.04336498
+        },
+        "transition": {
+          "sequence_count_any": 1411,
+          "primary_sequence_count": 181,
+          "inclusive_duration_sec": 2158.462326,
+          "allocated_duration_sec": 2095.095639,
+          "any_sequence_count_ratio": 0.27835865,
+          "primary_sequence_count_ratio": 0.03570724,
+          "allocated_duration_ratio": 0.07260099
+        },
+        "unknown": {
+          "sequence_count_any": 1838,
+          "primary_sequence_count": 1837,
+          "inclusive_duration_sec": 10696.25863,
+          "allocated_duration_sec": 10696.25863,
+          "any_sequence_count_ratio": 0.36259617,
+          "primary_sequence_count_ratio": 0.3623989,
+          "allocated_duration_ratio": 0.37065559
+        }
+      }
+    },
+    "final_selected": {
+      "total_sequence_count": 1052,
+      "total_duration_sec": 7208.883341,
+      "babel_matched_count": 1050,
+      "babel_unmatched_or_ambiguous_count": 2,
+      "allocated_duration_total_sec": 7208.883348,
+      "categories": {
+        "combat_sport": {
+          "sequence_count_any": 141,
+          "primary_sequence_count": 79,
+          "inclusive_duration_sec": 388.927333,
+          "allocated_duration_sec": 344.278751,
+          "any_sequence_count_ratio": 0.13403042,
+          "primary_sequence_count_ratio": 0.07509506,
+          "allocated_duration_ratio": 0.04775757
+        },
+        "dance": {
+          "sequence_count_any": 63,
+          "primary_sequence_count": 57,
+          "inclusive_duration_sec": 416.543335,
+          "allocated_duration_sec": 383.429334,
+          "any_sequence_count_ratio": 0.05988593,
+          "primary_sequence_count_ratio": 0.05418251,
+          "allocated_duration_ratio": 0.05318845
+        },
+        "gesture": {
+          "sequence_count_any": 369,
+          "primary_sequence_count": 102,
+          "inclusive_duration_sec": 968.914667,
+          "allocated_duration_sec": 546.468928,
+          "any_sequence_count_ratio": 0.35076046,
+          "primary_sequence_count_ratio": 0.09695817,
+          "allocated_duration_ratio": 0.07580493
+        },
+        "locomotion": {
+          "sequence_count_any": 672,
+          "primary_sequence_count": 400,
+          "inclusive_duration_sec": 2464.345337,
+          "allocated_duration_sec": 2215.207229,
+          "any_sequence_count_ratio": 0.63878327,
+          "primary_sequence_count_ratio": 0.38022814,
+          "allocated_duration_ratio": 0.30728854
+        },
+        "other": {
+          "sequence_count_any": 847,
+          "primary_sequence_count": 236,
+          "inclusive_duration_sec": 2451.186668,
+          "allocated_duration_sec": 1803.287928,
+          "any_sequence_count_ratio": 0.80513308,
+          "primary_sequence_count_ratio": 0.2243346,
+          "allocated_duration_ratio": 0.25014802
+        },
+        "static": {
+          "sequence_count_any": 488,
+          "primary_sequence_count": 72,
+          "inclusive_duration_sec": 809.282334,
+          "allocated_duration_sec": 697.461452,
+          "any_sequence_count_ratio": 0.46387833,
+          "primary_sequence_count_ratio": 0.06844106,
+          "allocated_duration_ratio": 0.09675028
+        },
+        "transition": {
+          "sequence_count_any": 822,
+          "primary_sequence_count": 102,
+          "inclusive_duration_sec": 1251.651333,
+          "allocated_duration_sec": 1208.449393,
+          "any_sequence_count_ratio": 0.78136882,
+          "primary_sequence_count_ratio": 0.09695817,
+          "allocated_duration_ratio": 0.16763337
+        },
+        "unknown": {
+          "sequence_count_any": 5,
+          "primary_sequence_count": 4,
+          "inclusive_duration_sec": 10.300333,
+          "allocated_duration_sec": 10.300333,
+          "any_sequence_count_ratio": 0.00475285,
+          "primary_sequence_count_ratio": 0.00380228,
+          "allocated_duration_ratio": 0.00142884
+        }
+      }
+    }
+  },
+  "selected_expected_frames_30fps": 216219,
+  "selected_duration_hours": 2.002468
+}

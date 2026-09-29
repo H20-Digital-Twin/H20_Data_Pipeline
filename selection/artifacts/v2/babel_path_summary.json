@@ -1,0 +1,12 @@
+{
+  "local_motion_count": 8345,
+  "babel_entry_count": 10892,
+  "babel_mapping_status": {
+    "ambiguous_local_conflict": 6,
+    "match_anchor_exact": 6998,
+    "unmatched": 3888
+  },
+  "matched_local_count": 6998,
+  "ambiguous_local_count": 3,
+  "unmatched_local_count": 1344
+}
