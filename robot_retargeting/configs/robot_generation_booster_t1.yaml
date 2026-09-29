@@ -1,0 +1,44 @@
+paths:
+  candidate_jsonl: /data/h2o_data_engine/selection/artifacts/v4/candidate_v4.jsonl
+  canonical_root: /data/h2o_data_engine/work/canonical/motions
+  body_model_root: /data/h2o_data_engine/robot_retargeting/assets/body_models
+  ply_root: "/data/h2o_data_engine/work/ply"
+  visual_storage_id: elements_se_h2o_avatar_ply
+  output_root: "/data/h2o_data_engine/work/robots"
+
+robot:
+  robot_id: booster_t1
+
+retarget:
+  seed_first_frame_root_from_target: true
+
+postprocess:
+  normalize_root_xy: true
+  align_min_body_origin_to_ground: true
+  ground_height_m: 0.0
+
+output:
+  compression: true
+  save_qpos_retarget_raw_in_diagnostics: true
+
+quality:
+  decision_mode: audit
+  quaternion_norm_tolerance: 0.0001
+  joint_limit_tolerance_rad: 0.0001
+  ik_position_error_threshold_m: 0.05
+  ik_rotation_error_threshold_rad: 0.35
+  review_ik_converged_ratio_below: 0.98
+  root_speed_warning_mps: 5.0
+  dof_speed_warning_rps: 20.0
+
+contact:
+  enabled: false
+  end_effector_names:
+    - left_foot_link
+    - right_foot_link
+    - AL5
+    - AR5
+  left_foot_links:
+    - left_foot_link
+  right_foot_links:
+    - right_foot_link
