@@ -1,0 +1,367 @@
+input:
+  amass_root: /data/motions/AMASS/smpl-x-n
+  v3_inventory_jsonl: /data/h2o_data_engine/selection/artifacts/v3/amass_inventory.jsonl
+  v3_candidate_jsonl: /data/h2o_data_engine/selection/artifacts/v3/candidate_v3.jsonl
+  babel_json_files:
+    - /data/motions/bable/train.json
+    - /data/motions/bable/val.json
+    - /data/motions/bable/test.json
+  semantic_splits:
+    - train
+    - val
+  selection_base: v3_candidate_strict_subset
+
+output:
+  root: /data/h2o_data_engine/selection/artifacts/v4
+  overwrite: false
+
+semantic_policy:
+  version: v4_user_confirmed
+  frame_event_min_duration_sec: 0.10
+  unverified_policy: auxiliary_only
+
+  # R: any valid occurrence rejects the complete, untrimmed sequence.
+  reject_any:
+    - a pose
+    - t pose
+    - noisy labels
+    - unknown
+    - cartwheel
+    - crawl
+    - dive
+    - fall
+    - flip
+    - handstand
+    - hang
+    - headstand
+    - kneel
+    - lie
+    - move up/down incline
+    - ride
+    - rolls on ground
+    - sit
+    - skate
+    - swim
+    - touch ground
+    - trip
+    - animal behavior
+    - cough
+    - cry
+    - drunken behavior
+    - fly
+    - get injured
+    - hiccup
+    - laugh
+    - lick
+    - shivering
+    - shout
+    - smell
+    - sneeze
+    - stumble
+    - vomit
+    - wobble
+    - yawn
+
+  # C: semantically admissible, but still subject to the V3 Neutral-body
+  # movement checks. Fast motion alone is never a semantic rejection.
+  conditional:
+    - adjust
+    - aim
+    - balance
+    - bend
+    - charge
+    - chicken dance
+    - clasp hands
+    - communicate (vocalise)
+    - cower
+    - crossing limbs
+    - crouch
+    - dance
+    - dip
+    - duck
+    - evade
+    - exercise/training
+    - fight
+    - flail arms
+    - glide
+    - grab body part
+    - hit
+    - hop
+    - hurry
+    - jog
+    - jump
+    - jumping jacks
+    - kick
+    - lean
+    - leap
+    - lunge
+    - martial art
+    - moonwalk
+    - plant feet
+    - play sport
+    - pose
+    - poses
+    - pray
+    - punch
+    - relax
+    - rocking movement
+    - rolling movement
+    - rub
+    - run
+    - scratch
+    - search
+    - shake
+    - skip
+    - slash gesture series
+    - slide
+    - sneak
+    - spin
+    - sports move
+    - squat
+    - stagger
+    - stances
+    - stand up
+    - stomp
+    - stroke
+    - sudden movement
+    - sway
+    - swing body part
+    - swipe
+    - tentative movements
+    - tiptoe
+    - touching body part
+    - touching face
+    - twist
+    - waddle
+    - yoga
+
+  # A: semantically admissible. This includes object-directed pantomime,
+  # interpersonal pantomime, limp and zombie as explicitly requested.
+  allowed:
+    - arm movements
+    - backwards
+    - backwards movement
+    - bow
+    - celebrate
+    - circular movement
+    - clap
+    - conduct
+    - count
+    - curtsy
+    - disagree
+    - face direction
+    - feet movements
+    - fidget
+    - flap
+    - foot movements
+    - forward movement
+    - gesture
+    - greet
+    - hand movements
+    - head movements
+    - inward motion
+    - knee movement
+    - leg movements
+    - look
+    - lowering body part
+    - march
+    - move back to original position
+    - move misc. body part
+    - point
+    - raising body part
+    - salute
+    - shoulder movements
+    - shrug
+    - shuffle
+    - side to side movement
+    - sideways movement
+    - sign
+    - spread
+    - stand
+    - step
+    - stop
+    - strafe
+    - stretch
+    - tap
+    - taunt
+    - to lower a body part
+    - turn
+    - uncross
+    - upper body movements
+    - waist movements
+    - wait
+    - walk
+    - wave
+    - weave
+    - wiggle
+    - wrist movements
+    - action with ball
+    - bartender behavior series
+    - catch
+    - chop
+    - clean something
+    - close something
+    - cut
+    - draw
+    - dribble
+    - drink
+    - drive
+    - eat
+    - fill
+    - fire gun
+    - fish
+    - give something
+    - golf
+    - grasp object
+    - interact with rope
+    - interact with/use object
+    - juggle
+    - jump rope
+    - knock
+    - lift something
+    - mix
+    - move something
+    - open something
+    - operate interface
+    - place something
+    - play catch
+    - play instrument
+    - press something
+    - read
+    - release
+    - remove
+    - shave
+    - stick
+    - style hair
+    - take/pick something up
+    - telephone call
+    - throw
+    - tie
+    - touch object
+    - wash
+    - write
+    - zip/unzip
+    - bump
+    - fist bump
+    - follow
+    - grab person
+    - hug
+    - lead
+    - pat
+    - support
+    - limp
+    - zombie
+
+  # M: non-decisive intent or meta labels. M-only sequences are kept in the
+  # auxiliary pool but do not enter the semantic core.
+  meta:
+    - admire
+    - check
+    - despair
+    - endure
+    - excite
+    - gain
+    - leave
+    - list body parts
+    - listen
+    - mime
+    - misc. abstract action
+    - misc. action
+    - misc. activities
+    - navigate
+    - perform
+    - play
+    - plead
+    - prepare
+    - protect
+    - reveal
+    - steady
+    - think
+    - transition
+    - try
+    - worry
+
+  # A few dense annotations have broad act_cat values but explicit raw
+  # calibration evidence. Keeping this safeguard preserves the confirmed
+  # A/T-pose rejection without using free text as a general taxonomy.
+  calibration_evidence:
+    - a pose
+    - t pose
+    - calibration
+    - interface calibration
+    - calibrate interface gesture
+
+path_matching:
+  require_unique_match: true
+  allow_anchor_match: true
+  allow_parent_stem_match: true
+  allow_unique_stem_match: true
+  fuzzy_match_enabled: false
+  dataset_aliases:
+    EyesJapanDataset: Eyes_Japan_Dataset
+    DFaust67: DFaust
+
+deduplication:
+  exact:
+    cosine_similarity_min: 0.9995
+    duration_ratio_min: 0.98
+    root_distance_max: 0.01
+    pose_distance_max: 0.005
+  cluster:
+    enabled: true
+    max_sequences_per_cluster: 3
+    cosine_similarity_min: 0.995
+    duration_ratio_min: 0.80
+    root_distance_max: 0.08
+    projection_dim: 32
+    neighbors_per_item: 20
+    deterministic_seed: 0
+  descriptor_frames: 32
+  target_fps: 30.0
+
+quota:
+  global:
+    max_total_duration_sec: 7200.0
+    max_sequence_count: 1500
+  overshoot_tolerance_sec: 10.0
+  pure_action_dominance_threshold: 0.80
+  allow_mixed_over_category_max: true
+  categories:
+    locomotion:
+      min_duration_sec: 600.0
+      max_duration_ratio: 0.25
+      max_sequence_count: 400
+    dance:
+      min_duration_sec: 600.0
+      max_duration_ratio: 0.20
+      max_sequence_count: 300
+    gesture:
+      min_duration_sec: 300.0
+      max_duration_ratio: 0.15
+    combat_sport:
+      min_duration_sec: 300.0
+      max_duration_ratio: 0.15
+    floor_motion:
+      max_duration_ratio: 0.0
+    unknown:
+      max_duration_ratio: 0.05
+  source_dataset:
+    enabled: true
+    max_duration_ratio_default: 0.30
+    max_sequence_ratio_default: 0.30
+    overrides:
+      DFaust:
+        max_duration_ratio: 0.10
+  subject:
+    enabled: true
+    max_duration_sec: 180.0
+    max_sequence_count: 15
+  selection:
+    quality_weight: 1.0
+    category_rarity_weight: 1.0
+    source_rarity_weight: 1.0
+    multi_action_weight: 0.3
+
+report:
+  comparison_examples_per_status: 20
+  top_act_cat_count: 50

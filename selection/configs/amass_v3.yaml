@@ -1,0 +1,171 @@
+input:
+  amass_root: /data/motions/AMASS/smpl-x-n
+  v2_inventory_jsonl: /data/h2o_data_engine/selection/artifacts/v2/amass_inventory.jsonl
+  v2_candidate_jsonl: /data/h2o_data_engine/selection/artifacts/v2/candidate_v1.jsonl
+  v2_summary_json: /data/h2o_data_engine/selection/artifacts/v2/scan_summary.json
+
+output:
+  root: /data/h2o_data_engine/selection/artifacts/v3
+  overwrite: false
+
+metrics:
+  target_fps: 30.0
+  smplx_model_path: /data/h2o_data_engine/vendor/xavatar/code/lib/smplx/smplx_model
+  num_betas: 16
+  force_gender: neutral
+  device: cpu
+  torch_num_threads: 8
+  fk_batch_size: 256
+  dedup_descriptor_frames: 32
+
+  static_root_speed_mps: 0.03
+  static_body_ang_speed_radps: 0.20
+  calibration_elbow_min_deg: 160.0
+  calibration_wrist_span_ratio: 0.65
+  calibration_wrist_drop_min_ratio: -0.08
+  calibration_wrist_drop_max_ratio: 0.32
+  upright_torso_ratio: 0.70
+  sitting_pelvis_height_ratio: 0.42
+  sitting_knee_angle_max_deg: 135.0
+  lying_vertical_span_ratio: 0.55
+  lying_torso_vertical_ratio: 0.55
+  floor_height_ratio: 0.28
+  crawl_pelvis_height_ratio: 0.48
+  crawl_torso_vertical_ratio: 0.65
+  crawl_contact_height_ratio: 0.30
+  jump_height_m: 0.08
+  extreme_root_speed_mps: 8.0
+  extreme_body_ang_speed_radps: 20.0
+
+neutral_gender_validation:
+  enabled: true
+  sample_count: 200
+  deterministic_seed: 0
+  minimum_status_agreement: 0.98
+
+heuristic_filter:
+  review_policy: exclude_from_v3_candidate
+  static:
+    reject:
+      static_fraction_min: 0.95
+      root_path_length_max_m: 0.20
+      require_low_joint_motion: true
+      joint_motion_integral_max_percentile: 0.05
+      joint_motion_integral_max_rad: null
+    review:
+      static_fraction_min: 0.80
+  floor_motion:
+    reject:
+      lying_fraction_min: 0.60
+      floor_fraction_min: 0.80
+      mode: any
+    review:
+      lying_fraction_min: 0.20
+      floor_fraction_min: 0.35
+      mode: any
+  crawling:
+    reject:
+      crawl_fraction_min: 0.75
+      floor_fraction_min: 0.60
+      require_both: true
+    review:
+      crawl_fraction_min: 0.25
+  sitting:
+    sit_labels: [sit, sitting]
+    primary_categories: [sitting]
+    reject:
+      sitting_fraction_min: 0.70
+      require_semantic_support: true
+      semantic_coverage_min: 0.30
+    review:
+      sitting_fraction_min: 0.35
+  abnormal_motion:
+    reject:
+      body_ang_speed_p99_min_rps: 40.0
+      jump_fraction_min: 0.05
+      extreme_frame_fraction_min: 0.05
+      min_consecutive_abnormal_frames: 2
+      combination_mode: speed_and_one_auxiliary
+    review:
+      body_ang_speed_p99_min_rps: 25.0
+  root_motion:
+    reject:
+      root_speed_p99_max_mps: 6.0
+    review:
+      root_speed_p99_max_mps: 4.5
+  calibration:
+    reject:
+      calibration_fraction_min: 0.15
+      static_fraction_min: 0.80
+      longest_run_sec_min: 1.0
+    review:
+      calibration_fraction_min: 0.10
+
+deduplication:
+  exact:
+    cosine_similarity_min: 0.9995
+    duration_ratio_min: 0.98
+    root_distance_max: 0.01
+    pose_distance_max: 0.005
+  cluster:
+    enabled: true
+    max_sequences_per_cluster: 3
+    cosine_similarity_min: 0.995
+    duration_ratio_min: 0.80
+    root_distance_max: 0.08
+    projection_dim: 32
+    neighbors_per_item: 20
+    deterministic_seed: 0
+
+quota:
+  global:
+    max_total_duration_sec: 7200.0
+    max_sequence_count: 1500
+  overshoot_tolerance_sec: 10.0
+  pure_action_dominance_threshold: 0.80
+  allow_mixed_over_category_max: true
+  categories:
+    locomotion:
+      min_duration_sec: 600.0
+      max_duration_ratio: 0.25
+      max_sequence_count: 400
+    dance:
+      min_duration_sec: 600.0
+      max_duration_ratio: 0.20
+      max_sequence_count: 300
+    gesture:
+      min_duration_sec: 300.0
+      max_duration_ratio: 0.15
+    combat_sport:
+      min_duration_sec: 300.0
+      max_duration_ratio: 0.15
+    floor_motion:
+      max_duration_ratio: 0.0
+    unknown:
+      max_duration_ratio: 0.05
+  source_dataset:
+    enabled: true
+    max_duration_ratio_default: 0.30
+    max_sequence_ratio_default: 0.30
+    overrides:
+      DFaust:
+        max_duration_ratio: 0.10
+  subject:
+    enabled: true
+    max_duration_sec: 180.0
+    max_sequence_count: 15
+  selection:
+    quality_weight: 1.0
+    category_rarity_weight: 1.0
+    source_rarity_weight: 1.0
+    multi_action_weight: 0.3
+
+report:
+  duration_bins_sec: [2.0, 5.0, 10.0, 15.0]
+  comparison_examples_per_status: 20
+
+generation_budget:
+  max_selected_frames_30fps: null
+  max_estimated_ply_hours: null
+  max_estimated_render_hours: null
+  max_estimated_storage_gb: null

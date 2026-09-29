@@ -1,0 +1,168 @@
+amass:
+  root: /data/motions/AMASS/smpl-x-n
+  pattern: "**/*_stageii.npz"
+  exclude_patterns:
+    - "**/*_stagei.npz"
+
+output:
+  root: /data/h2o_data_engine/selection/artifacts/v2
+  overwrite: false
+
+required_fields:
+  pose_keys: [poses, body_pose, pose_body]
+  translation_keys: [trans, transl]
+  fps_keys: [mocap_framerate, mocap_frame_rate, fps]
+  betas_keys: [betas]
+  gender_keys: [gender]
+
+filter:
+  target_fps: 30.0
+  min_duration_sec: 2.0
+  max_duration_v1_sec: 15.0
+  max_duration_defer_sec: 30.0
+  reject_nan: true
+  reject_inf: true
+  require_translation: true
+  require_pose_translation_same_length: true
+  fps_ratio_tolerance: 0.0001
+
+heuristic:
+  max_abs_pose_value: 100.0
+  max_abs_translation_value: 1000.0
+  min_pose_motion_mean: 0.0
+  quality_motion_scale: 0.02
+
+babel:
+  enabled: true
+  dense_json_files:
+    - /data/motions/bable/train.json
+    - /data/motions/bable/val.json
+    - /data/motions/bable/test.json
+  use_extra_annotations: false
+  hard_blacklist:
+    - t pose
+    - a pose
+    - calibration
+    - interface calibration
+    - calibrate interface gesture
+    - crawl
+    - lie
+    - rolls on ground
+    - roll on floor
+  soft_blacklist:
+    - sit
+    - kneel
+    - get down
+    - floor
+  soft_blacklist_min_coverage: 0.35
+  timeline:
+    use_frame_ann_when_available: true
+    sequence_ann_fallback: true
+    unlabeled_policy: keep_unknown
+
+path_matching:
+  require_unique_match: true
+  allow_anchor_match: true
+  allow_parent_stem_match: true
+  allow_unique_stem_match: true
+  fuzzy_match_enabled: false
+  ambiguous_policy: heuristic_only
+  unmatched_policy: heuristic_only
+  dataset_aliases:
+    EyesJapanDataset: Eyes_Japan_Dataset
+    DFaust67: DFaust
+
+category_taxonomy:
+  unmapped_category: other
+  excluded_meta_categories: [meta]
+  groups:
+    locomotion:
+      - walk
+      - pace
+      - step
+      - run
+      - jog
+      - forward movement
+      - backwards movement
+      - sideways movement
+    dance: [dance]
+    gesture:
+      - wave
+      - point
+      - touching face
+      - gesture
+      - hand movements
+      - arm movements
+      - clap
+    combat_sport:
+      - punch
+      - kick
+      - boxing
+      - martial art
+      - hit
+    transition:
+      - transition
+      - stand up
+      - get up
+      - get down
+    static:
+      - stand
+      - stop
+      - wait
+      - t pose
+      - a pose
+    floor_motion:
+      - lie
+      - crawl
+      - rolls on ground
+    meta:
+      - perform
+      - interact
+
+dedup:
+  enabled: true
+  scope_field: source_dataset
+  sample_frames: 32
+  quantization_tolerance: 0.0001
+
+quota:
+  enabled: true
+  global:
+    max_total_duration_sec: 7200.0
+    max_sequence_count: 1500
+  pure_action_dominance_threshold: 0.80
+  allow_mixed_over_category_max: true
+  overshoot_tolerance_sec: 10.0
+  categories:
+    locomotion:
+      min_duration_sec: 600.0
+      max_ratio: 0.25
+      max_sequence_count: 400
+    dance:
+      min_duration_sec: 600.0
+      max_ratio: 0.20
+      max_sequence_count: 300
+    gesture:
+      min_duration_sec: 300.0
+      max_ratio: 0.15
+    combat_sport:
+      min_duration_sec: 300.0
+      max_ratio: 0.15
+    floor_motion:
+      max_ratio: 0.0
+  selection:
+    quality_weight: 1.0
+    rarity_weight: 1.0
+    multi_action_weight: 0.3
+    deterministic_seed: 0
+
+report:
+  duration_bins_sec: [2.0, 5.0, 10.0, 15.0, 30.0]
+  common_fps_values: [30.0, 60.0, 90.0, 100.0, 120.0]
+  fps_bucket_tolerance: 0.0001
+
+scan:
+  recursive: true
+  sort_files: true
+  continue_on_error: true
+  save_error_trace: true

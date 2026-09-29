@@ -1,0 +1,89 @@
+input:
+  candidate_jsonl: /data/h2o_data_engine/selection/artifacts/v4/candidate_v4.jsonl
+  amass_root: /data/motions/AMASS/smpl-x-n
+
+output:
+  root: /data/h2o_data_engine/selection/artifacts/g1_no_hands_v1
+  create_symlink_tree: true
+
+policy:
+  version: g1_no_hands_v1
+
+  # These actions need an object, articulated fingers, or a meaningful hand-object
+  # contact. They are rejected even when the rest of the body motion is usable.
+  manipulation_required:
+    - action with ball
+    - catch
+    - chop
+    - clean something
+    - close something
+    - cut
+    - draw
+    - dribble
+    - drink
+    - drive
+    - eat
+    - fill
+    - fire gun
+    - fish
+    - give something
+    - golf
+    - grasp object
+    - interact with rope
+    - interact with/use object
+    - juggle
+    - jump rope
+    - knock
+    - lift something
+    - mix
+    - move something
+    - open something
+    - operate interface
+    - place something
+    - play catch
+    - play instrument
+    - press something
+    - read
+    - release
+    - remove
+    - shave
+    - stick
+    - style hair
+    - take/pick something up
+    - telephone call
+    - throw
+    - tie
+    - touch object
+    - wash
+    - write
+    - zip/unzip
+
+  # These do not necessarily need an external object, but their semantics depend
+  # on hands or hand/body/person contact. Keep them for optional manual review,
+  # not in the default no-hand training core.
+  hand_contact_dependent:
+    - clap
+    - clasp hands
+    - fist bump
+    - grab body part
+    - grab person
+    - hand movements
+    - pat
+    - rub
+    - scratch
+    - stroke
+    - support
+    - swipe
+    - tap
+    - touching body part
+    - touching face
+    - wrist movements
+
+  # A small audited supplement for cases where the dense BABEL act_cat is too
+  # generic but the motion name or dense free-text tag is unambiguous.
+  free_text_manipulation_phrases:
+    - throwing hard
+    - walk with box
+
+  free_text_hand_review_phrases:
+    - check watch
